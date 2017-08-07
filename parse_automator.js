@@ -40,6 +40,7 @@ fs.readdir(directory, (err, files) => {
     // FOR loop that runs seven times for each .md file
     for (var i = 0; i < 7; i++) {
 
+      // Difference between macOS and Windows script in directory path-ing
       execSync('node bible_verse_parser_2.js ' + '-p ' + directory + folderNum +
         '\\' + ' -l ' + argv.l);
 
