@@ -2,7 +2,7 @@
 var argv = require("optimist")
   .usage("Create the file structure for a quarter in given language.\n" +
   "Usage: $0 -s [string] -l [string] -q [string] -c [num] -t [string] -d [string] -h [string] -u [bool] -i [bool] -y [hex] -z [hex]")
-  .alias({"s":"start-date", "l": "language", "q": "quarter", "c": "count", "t": "title", "d": "description", "h": "human-date", "u": "teacher-comments", "i": "inside-story", "m": "tmi-tips", "k": "lesson-cover", "y": "color-primary", "z": "color-dark" })
+  .alias({"s":"start-date", "l": "language", "q": "quarter", "c": "count", "t": "title", "d": "description", "h": "human-date", "u": "teacher-comments", "i": "inside-story", "m": "tmi", "k": "lesson-cover", "y": "color-primary", "z": "color-dark" })
   .describe({
     "s": "Start date in DD/MM/YYYY format. Ex: 25/01/2016",
     "l": "Target language. For ex. 'en' or 'ru'",
@@ -13,7 +13,7 @@ var argv = require("optimist")
     "h": "Human readable date of quarterly. Ex. Fourth quarter of 2016",
     "u": "Include teacher comments",
     "i": "Inside story",
-    "m": "TMI Tips (ko only)",
+    "m": "Create TMI (Total Member Involvement) News/Tips placeholder lessons",
     "k": "Create lesson cover placeholder images",
     "y": "Primary color for the lesson",
     "z": "Dark primary color for the lesson"
@@ -220,8 +220,8 @@ var LOCALE_VARS = {
     "vi": "Inside Story"
   },
 
-  "tmi_tips": {
-    "ko": "TMI Tips"
+  "tmi": {
+    "ko": "TMI"
   }
 };
 
@@ -236,7 +236,7 @@ function createLanguageFolder(quarterlyLanguage){
   console.log("Necessary " + quarterlyLanguage + " directory created");
 }
 
-function createQuarterlyFolderAndContents(quarterlyLanguage, quarterlyId, quarterlyLessonAmount, quarterlyTitle, quarterlyDescription, quarterlyHumanDate, quarterlyTeacherComments, quarterlyInsideStory, quarterlyTmiTips, quarterlyStartDate, lessonCover, quarterlyColorPrimary, quarterlyColorDark){
+function createQuarterlyFolderAndContents(quarterlyLanguage, quarterlyId, quarterlyLessonAmount, quarterlyTitle, quarterlyDescription, quarterlyHumanDate, quarterlyTeacherComments, quarterlyInsideStory, quarterlyTmi, quarterlyStartDate, lessonCover, quarterlyColorPrimary, quarterlyColorDark){
 
   var start_date = moment(quarterlyStartDate, DATE_FORMAT),
       start_date_f = moment(quarterlyStartDate, DATE_FORMAT);
@@ -269,9 +269,9 @@ function createQuarterlyFolderAndContents(quarterlyLanguage, quarterlyId, quarte
       );
     }
 
-    if (quarterlyTmiTips){
-      fs.outputFileSync(SRC_PATH+ "/" + quarterlyLanguage + "/" + quarterlyId + "/" + pad(i) + "/tmi-tips.md",
-        "---\ntitle:  "+LOCALE_VARS["tmi_tips"][quarterlyLanguage]+"\ndate:   "+moment(start_date).add(-1, "d").format(DATE_FORMAT)+"\n---\n\n"+LOCALE_VARS["empty_placeholder"][quarterlyLanguage]
+    if (quarterlyTmi){
+      fs.outputFileSync(SRC_PATH+ "/" + quarterlyLanguage + "/" + quarterlyId + "/" + pad(i) + "/tmi.md",
+        "---\ntitle:  "+LOCALE_VARS["tmi"][quarterlyLanguage]+"\ndate:   "+moment(start_date).add(-1, "d").format(DATE_FORMAT)+"\n---\n\n"+LOCALE_VARS["empty_placeholder"][quarterlyLanguage]
       );
     }
 
@@ -307,5 +307,5 @@ try {
     console.log("Something weird happened. Aborting");
   }
 } catch (e) {
-  createQuarterlyFolderAndContents(argv.l, argv.q, argv.c, argv.t, argv.d, argv.h, argv.u, argv.i, argv.s, argv.k, argv.y, argv.z);
+  createQuarterlyFolderAndContents(argv.l, argv.q, argv.c, argv.t, argv.d, argv.h, argv.u, argv.i, argv.m, argv.s, argv.k, argv.y, argv.z);
 }
